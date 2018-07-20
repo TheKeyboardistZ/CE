@@ -1,0 +1,35 @@
+
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+    
+    \begin{verbatim}
+function a = avlength(alphabet,P)
+%Ritorna la lunghezza media di un alfabeto
+n = length(alphabet);
+a = 0;
+for i = 1:n
+    a = a + numel(num2str(alphabet(i)))*P(i);
+end
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}Not enough input arguments.
+
+Error in avlength (line 3)
+n = length(alphabet);
+\end{verbatim} \color{black}
+    
+
+
+\end{document}
+    

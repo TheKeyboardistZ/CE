@@ -1,0 +1,35 @@
+
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+    
+    \begin{verbatim}
+function a = AvLengthTunstall(dict,P)
+% Calcola la lunghezza media di un codice di Tunstall
+n = length(dict);
+a = 0;
+for i = 1:n
+    a = a + length(dict{i,1})*P(i);
+end
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}Not enough input arguments.
+
+Error in AvLengthTunstall (line 3)
+n = length(dict);
+\end{verbatim} \color{black}
+    
+
+
+\end{document}
+    

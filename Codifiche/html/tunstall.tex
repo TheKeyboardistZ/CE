@@ -1,0 +1,75 @@
+
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+    
+    
+\subsection*{Contents}
+
+\begin{itemize}
+\setlength{\itemsep}{-1ex}
+   \item Creazione famiglia di messaggi
+   \item Conversione in binario
+\end{itemize}
+\begin{verbatim}
+function [T,PNew] = tunstall(A,P,j)
+\end{verbatim}
+
+
+\subsection*{Creazione famiglia di messaggi}
+
+\begin{par}
+Dato un alfabeto A,un vettore di probabilità P e la lunghezza j, calcola la corrispondente codifica di Tunstall
+\end{par} \vspace{1em}
+\begin{verbatim}
+M = A;
+PNew = P;
+for i = 1:j
+    [~,maxIndex] = max(PNew);
+    m = M{maxIndex}; %Seleziono l'elemento con probabilità max
+    M(maxIndex) = []; %Lo cancello
+    p = PNew(maxIndex);
+    PNew(maxIndex) = [];
+    for k = 1:length(A) %aggiungo i K elementi "ma" con a \in A
+       M{length(M)+1} = strcat(m,A{k});
+       PNew = [PNew', p*P(k)]';
+    end
+end
+
+T = M;
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}Not enough input arguments.
+
+Error in tunstall (line 6)
+M = A;
+\end{verbatim} \color{black}
+    
+
+\subsection*{Conversione in binario}
+
+\begin{verbatim}
+n = length(T);
+l = ceil(log2(n));
+    for i = 1:n
+        T{i,2} = de2bi(i-1,l);
+    end
+\end{verbatim}
+\begin{verbatim}
+end
+\end{verbatim}
+
+
+
+\end{document}
+    

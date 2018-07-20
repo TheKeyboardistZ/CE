@@ -1,0 +1,317 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>tunstallenco</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-07-15"><meta name="DC.source" content="tunstallenco.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> enco = tunstallenco(sig,dict)
+<span class="comment">% Questa funzione &egrave; stata ottenuta modificando huffmanenco</span>
+
+<span class="comment">%TUNSTALLENCO Encode an input signal using Tunstall coding algorithm.</span>
+<span class="comment">%</span>
+<span class="comment">%    ENCO = TUNSTALLENCO(SIG, DICT) encodes the input signal, SIG, based on</span>
+<span class="comment">%    the code dictionary, DICT. The code dictionary is generated using the</span>
+<span class="comment">%    TUNSTALL function. Each of the symbols appearing in SIG must be</span>
+<span class="comment">%    present in the code dictionary, DICT. The SIG input can be a numeric</span>
+<span class="comment">%    vector or a single-dimensional cell array containing alphanumeric</span>
+<span class="comment">%    values.</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+
+<span class="comment">% % Error checking ------------------------</span>
+<span class="comment">%</span>
+<span class="comment">% msg='';</span>
+<span class="comment">% if nargin &lt; 2</span>
+<span class="comment">%     msg = getString(message('MATLAB:narginchk:notEnoughInputs'));</span>
+<span class="comment">% elseif nargin &gt; 2</span>
+<span class="comment">%     msg = getString(message('MATLAB:narginchk:tooManyInputs'));</span>
+<span class="comment">% else</span>
+<span class="comment">%     msg = '';</span>
+<span class="comment">% end</span>
+<span class="comment">% if ( msg )</span>
+<span class="comment">% 	error(message('comm:tunstallenco:InputArgumentCount'))</span>
+<span class="comment">% end</span>
+<span class="comment">%</span>
+<span class="comment">% % check if the input is a vector</span>
+<span class="comment">% [m,n] = size(sig);</span>
+<span class="comment">% if ( m ~= 1 &amp;&amp; n ~= 1)</span>
+<span class="comment">%     error(message('comm:tunstallenco:VectorInputSignal'));</span>
+<span class="comment">% end</span>
+<span class="comment">%</span>
+<span class="comment">% % End of error checking -----------------</span>
+
+
+<span class="keyword">if</span> (~iscell(sig) )
+	[m,n] = size(sig);
+	sig = mat2cell(sig, ones(1,m), ones(1,n) );
+<span class="keyword">end</span>
+
+<span class="comment">% Find the size of the largest element in the dictionary, for preallocation</span>
+<span class="comment">% purposes</span>
+maxSize = 0;
+dictLength = size(dict,1);
+<span class="keyword">for</span> i = 1 : dictLength
+    tempSize = size(dict{i,2},2);
+    <span class="keyword">if</span> (tempSize &gt; maxSize)
+        maxSize = tempSize;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Preallocate memory for enco</span>
+enco = zeros(1, length(sig)*maxSize);
+
+idxCode = 1;
+i=1;
+<span class="keyword">while</span> i &lt;= length(sig)
+
+    <span class="comment">% For each signal value, search sequentially through the dictionary to</span>
+    <span class="comment">% find the code for the given signal</span>
+    tempcode = [];
+    <span class="comment">%Cerca la prima coppia</span>
+    <span class="keyword">if</span> i&lt;length(sig)
+    <span class="keyword">for</span> j = 1 : dictLength
+
+
+        <span class="keyword">if</span>(length(strcat(sig{i},sig{i+1})) == length(dict{j,1}))
+            <span class="keyword">if</span>( strcat(sig{i},sig{i+1}) == dict{j,1})
+             tempcode = dict{j,2};
+             <span class="keyword">break</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+   lenCode = length(tempcode);
+    <span class="keyword">else</span>
+        lenCode = 0;
+    <span class="keyword">end</span>
+
+   <span class="comment">%Se non la trovo oppure sono arrivato all'ultima lettera cerco la prima lettera</span>
+   <span class="keyword">if</span> (lenCode == 0)
+       <span class="keyword">for</span> j = 1 : dictLength
+        <span class="keyword">if</span>(length(sig{i}) == length(dict{j,1}))
+            <span class="keyword">if</span>(sig{i} == dict{j,1})
+             tempcode = dict{j,2};
+             <span class="keyword">break</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+       <span class="keyword">end</span>
+
+       lenCode = length(tempcode);
+       <span class="keyword">if</span> (lenCode == 0)
+           <span class="keyword">if</span>(i == length(sig))
+               <span class="keyword">break</span>;
+           <span class="keyword">else</span>
+       error(message(<span class="string">'comm:tunstallenco:CodeNotFound'</span>))
+           <span class="keyword">end</span>
+        <span class="keyword">else</span>
+            i = i+1;
+        <span class="keyword">end</span>
+   <span class="keyword">else</span>
+       i = i+2;
+   <span class="keyword">end</span>
+
+
+    enco(idxCode : idxCode+lenCode-1) = tempcode;
+    idxCode = idxCode + lenCode;
+<span class="keyword">end</span>
+
+<span class="comment">% Strip off the unused vector elements</span>
+enco = enco(1:idxCode-1);
+
+<span class="keyword">if</span>( n == 1 )        <span class="comment">% if input was a column vector</span>
+    enco = enco';   <span class="comment">% convert the encoded signal to a column vector</span>
+<span class="keyword">end</span>
+
+<span class="comment">% EOF -- tunstallenco</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in tunstallenco (line 38)
+if (~iscell(sig) )
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function enco = tunstallenco(sig,dict)
+% Questa funzione è stata ottenuta modificando huffmanenco
+
+%TUNSTALLENCO Encode an input signal using Tunstall coding algorithm.
+%    
+%    ENCO = TUNSTALLENCO(SIG, DICT) encodes the input signal, SIG, based on 
+%    the code dictionary, DICT. The code dictionary is generated using the
+%    TUNSTALL function. Each of the symbols appearing in SIG must be
+%    present in the code dictionary, DICT. The SIG input can be a numeric
+%    vector or a single-dimensional cell array containing alphanumeric
+%    values.
+%    
+%   
+
+% % Error checking REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+% 
+% msg='';
+% if nargin < 2
+%     msg = getString(message('MATLAB:narginchk:notEnoughInputs'));
+% elseif nargin > 2
+%     msg = getString(message('MATLAB:narginchk:tooManyInputs'));
+% else
+%     msg = '';
+% end
+% if ( msg )
+% 	error(message('comm:tunstallenco:InputArgumentCount'))
+% end
+% 
+% % check if the input is a vector
+% [m,n] = size(sig);
+% if ( m ~= 1 && n ~= 1)
+%     error(message('comm:tunstallenco:VectorInputSignal'));
+% end
+% 
+% % End of error checking REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+
+if (~iscell(sig) )
+	[m,n] = size(sig);
+	sig = mat2cell(sig, ones(1,m), ones(1,n) );
+end
+
+% Find the size of the largest element in the dictionary, for preallocation
+% purposes
+maxSize = 0;
+dictLength = size(dict,1);
+for i = 1 : dictLength
+    tempSize = size(dict{i,2},2);
+    if (tempSize > maxSize)
+        maxSize = tempSize;
+    end
+end
+
+% Preallocate memory for enco
+enco = zeros(1, length(sig)*maxSize);
+
+idxCode = 1;
+i=1;
+while i <= length(sig)
+    
+    % For each signal value, search sequentially through the dictionary to
+    % find the code for the given signal
+    tempcode = [];
+    %Cerca la prima coppia
+    if i<length(sig)
+    for j = 1 : dictLength
+        
+        
+        if(length(strcat(sig{i},sig{i+1})) == length(dict{j,1})) 
+            if( strcat(sig{i},sig{i+1}) == dict{j,1})
+             tempcode = dict{j,2};
+             break;
+            end
+        end
+    end
+     
+   lenCode = length(tempcode);
+    else
+        lenCode = 0;
+    end
+   
+   %Se non la trovo oppure sono arrivato all'ultima lettera cerco la prima lettera
+   if (lenCode == 0)
+       for j = 1 : dictLength
+        if(length(sig{i}) == length(dict{j,1})) 
+            if(sig{i} == dict{j,1})
+             tempcode = dict{j,2};
+             break;
+            end
+        end
+        
+       end
+    
+       lenCode = length(tempcode);
+       if (lenCode == 0)
+           if(i == length(sig))
+               break;
+           else
+       error(message('comm:tunstallenco:CodeNotFound'))
+           end
+        else
+            i = i+1;
+        end
+   else
+       i = i+2;
+   end
+   
+   
+    enco(idxCode : idxCode+lenCode-1) = tempcode;
+    idxCode = idxCode + lenCode;
+end
+
+% Strip off the unused vector elements
+enco = enco(1:idxCode-1);
+
+if( n == 1 )        % if input was a column vector
+    enco = enco';   % convert the encoded signal to a column vector
+end
+
+% EOF REPLACE_WITH_DASH_DASH tunstallenco
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,121 @@
+
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+    
+    
+\subsection*{Contents}
+
+\begin{itemize}
+\setlength{\itemsep}{-1ex}
+   \item Alfabeto primario e testo primario
+   \item Codifica con Huffman
+   \item Codifica con Tunstall
+   \item Confronto
+\end{itemize}
+\begin{verbatim}
+% Questo script codifica un frammento della divina commedia sia tramite la
+% codifica di Huffman, sia tramite quella di Tunstall, utilizzando però un
+% vettore di probabilità generato a caso
+\end{verbatim}
+
+
+\subsection*{Alfabeto primario e testo primario}
+
+\begin{verbatim}
+load divinacommedia
+
+c = c(1:1000);
+A = findAlphabet(c);
+P = rand(length(A),1);
+P = P/sum(P);
+
+dimension = ceil(log2(length(A)))*length(c);
+
+[Psort,Isort] = sort(P,'descend');
+A(Isort);
+
+% Converto il testo e l'alfabeto primari nel formato _cell_
+symbols = zeros(length(A),1);
+for i = 1:length(A)
+    symbols(i) = A(i);
+end
+ symbols = cellstr(num2str(symbols));
+
+ text = zeros(length(c),1);
+ for i = 1:length(c)
+     text(i) = c(i);
+ end
+ text = cellstr(num2str(text));
+\end{verbatim}
+
+
+\subsection*{Codifica con Huffman}
+
+\begin{verbatim}
+ tic
+ dictH = huffmandict(symbols,P);
+ toc
+
+ tic
+ compH = huffmanenco(text,dictH);
+ toc
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}Elapsed time is 0.028306 seconds.
+Elapsed time is 0.048025 seconds.
+\end{verbatim} \color{black}
+    
+
+\subsection*{Codifica con Tunstall}
+
+\begin{verbatim}
+ tic
+ dictT = tunstall(symbols,P,2);
+ toc
+
+ tic
+ compT = tunstallenco(text,dictT);
+ toc
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}Elapsed time is 0.033179 seconds.
+Elapsed time is 11.983876 seconds.
+\end{verbatim} \color{black}
+    
+
+\subsection*{Confronto}
+
+\begin{verbatim}
+ dimensionH = length(compH);
+ rapportoHuffman = dimensionH/dimension
+ dimensionT = length(compT);
+ rapportoTunstall = dimensionT/dimension
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+rapportoHuffman =
+
+    0.9567
+
+
+rapportoTunstall =
+
+    1.3280
+
+\end{verbatim} \color{black}
+    
+
+
+\end{document}
+    

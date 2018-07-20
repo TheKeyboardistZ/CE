@@ -1,0 +1,120 @@
+
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+    
+    
+\subsection*{Contents}
+
+\begin{itemize}
+\setlength{\itemsep}{-1ex}
+   \item Alfabeto primario e testo primario
+   \item Codifica con Huffman
+   \item Codifica con Tunstall
+   \item Confronto
+\end{itemize}
+\begin{verbatim}
+% Questo script codifica un testo generato ad hoc in modo che la codifica
+% di Tunstall risulti efficiente
+%
+\end{verbatim}
+
+
+\subsection*{Alfabeto primario e testo primario}
+
+\begin{verbatim}
+c = 'AAAAAAAAAAAAAABACEAFGHIAAALMANAOPQARSTAAAUVAZAAAAAABAGAFFFARAVAAARAAFARATAY';
+
+% Chiamo la funzione _findAlphabet_ che mi consente di trovare l'alfabeto
+% dei simboli che occorrono nel testo primario e le relative frequenze
+[A,P] = findAlphabet(c);
+
+dimension = ceil(log2(length(A)))*length(c);
+
+[Psort,Isort] = sort(P,'descend');
+A(Isort);
+
+% Converto il testo e l'alfabeto primari nel formato _cell_
+symbols = zeros(length(A),1);
+for i = 1:length(A)
+    symbols(i) = A(i);
+end
+ symbols = cellstr(num2str(symbols));
+
+ text = zeros(length(c),1);
+ for i = 1:length(c)
+     text(i) = c(i);
+ end
+ text = cellstr(num2str(text));
+\end{verbatim}
+
+
+\subsection*{Codifica con Huffman}
+
+\begin{verbatim}
+ tic
+ dictH = huffmandict(symbols,P);
+ toc
+
+ tic
+ compH = huffmanenco(text,dictH);
+ toc
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}Elapsed time is 0.033669 seconds.
+Elapsed time is 0.015151 seconds.
+\end{verbatim} \color{black}
+    
+
+\subsection*{Codifica con Tunstall}
+
+\begin{verbatim}
+ tic
+ dictT = tunstall(symbols,P,1);
+ toc
+
+ tic
+ compT = tunstallenco(text,dictT);
+ toc
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}Elapsed time is 0.010940 seconds.
+Elapsed time is 0.159715 seconds.
+\end{verbatim} \color{black}
+    
+
+\subsection*{Confronto}
+
+\begin{verbatim}
+ dimensionH = length(compH);
+ rapportoHuffman = dimensionH/dimension
+ dimensionT = length(compT);
+ rapportoTunstall = dimensionT/dimension
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+rapportoHuffman =
+
+    0.5387
+
+
+rapportoTunstall =
+
+    0.7200
+
+\end{verbatim} \color{black}
+    
+
+
+\end{document}
+    
